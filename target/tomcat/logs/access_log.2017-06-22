@@ -1,0 +1,2 @@
+0:0:0:0:0:0:0:1 - - [22/Jun/2017:17:40:58 +0800] "GET /jfinalDemo_login/login.jsp HTTP/1.1" 200 689 http-bio-8080-exec-1 1803
+0:0:0:0:0:0:0:1 - - [22/Jun/2017:17:41:00 +0800] "GET /jfinalDemo_login/login/login HTTP/1.1" 200 21 http-bio-8080-exec-2 21
