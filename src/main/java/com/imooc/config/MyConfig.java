@@ -7,6 +7,7 @@ import com.jfinal.config.Interceptors;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
+import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
@@ -18,7 +19,7 @@ public class MyConfig extends JFinalConfig {
 	@Override
 	public void configConstant(Constants me) {
 		// TODO Auto-generated method stub
-		
+		//获取数据库配置信息
 		PropKit.use("config.txt");//这个文件，放在src/main/resources内
 		me.setDevMode(true);
 		me.setViewType(ViewType.JSP);
@@ -36,7 +37,6 @@ public class MyConfig extends JFinalConfig {
 	@Override
 	public void configEngine(Engine me) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -46,6 +46,10 @@ public class MyConfig extends JFinalConfig {
 		
 		ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
 		me.add(arp);
+		
+		//添加sql文件
+		arp.setBaseSqlTemplatePath(PathKit.getRootClassPath());
+		arp.addSqlTemplate("mysql.sql");
 		
 		//设置user为主键，可以使用fingById快速查询
 		arp.addMapping("user", "user", User.class);

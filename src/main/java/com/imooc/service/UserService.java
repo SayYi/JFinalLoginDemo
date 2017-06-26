@@ -1,6 +1,8 @@
 package com.imooc.service;
 
 import com.imooc.model.User;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 
 /**提供用户相关服务
  * 1、用户登录验证
@@ -11,7 +13,7 @@ import com.imooc.model.User;
 public class UserService {
 
 	/**检测用户信息<br>
-	 * 验证失败：用户/密码不能为空；用户/密码错误<br>
+	 * 验证失败：用户/密码不能为空（拦截器已实现）；用户/密码错误<br>
 	 * 验证成功：null<br>
 	 * @return
 	 */
@@ -20,15 +22,12 @@ public class UserService {
 		String username = user.getStr("user");
 		String password = user.getStr("password");
 		
-		//验证输入信息不完整
-		if (username == null || 
-				password == null){
-			return "用户/密码不能为空";
-		}
 		//通过username尝试从数据库读取信息；需要设置user为主键
-		User temp = User.user.findById(username);
+		//User temp = User.user.findById(username);
+		String sql = User.user.getSql("getUser");
+		User temp = User.user.findFirst(sql, username);
 		
-		//未找到该用户或者密码不匹配
+		//未找到该用户，或者密码不匹配
 		if (temp == null || 
 				!temp.getStr("password").equals(password)){
 			return "用户/密码错误";
@@ -38,7 +37,7 @@ public class UserService {
 	}
 
 	/**用户注册<br>
-	 * 注册失败：用户/密码不能为空；用户已存在<br>
+	 * 注册失败：用户/密码不能为空（拦截器已实现）；用户已存在<br>
 	 * 注册成功：null<br>
 	 * @param user
 	 * @return
@@ -47,18 +46,15 @@ public class UserService {
 		//获取页面表单传递的信息
 		String username = user.getStr("user");
 		String password = user.getStr("password");
-			
-		//验证输入信息不完整
-		if (username == null || 
-				password == null){
-			return "用户/密码不能为空";
-		}
+		
 		//用户已存在
 		if (User.user.findById(username) != null){
 			return "用户已存在";
 		}
 		//注册用户
-		new User().set("user", username).set("password", password).save();
+//		new User().set("user", username).set("password", password).save();
+		Record re = new Record().set("user", username).set("password", password);
+		Db.save("user", re);
 		return null;
 	}
 

@@ -13,7 +13,7 @@
 <body>
  <h4>注册页面</h4>
  <form action="<%=basePath %>login/register" method="post">
-  <input name="user" type="text" /><br />
+  <input name="user" type="text" value="${param.user }" /><br />
   <input name="password" type="password" /><br />
   <input type="submit" value="submit" />
  </form>
